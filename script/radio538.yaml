@@ -1,0 +1,37 @@
+radio538:
+  alias: Play Radio on Chromecast Audio
+  sequence:
+    - service: switch.turn_on
+      entity_id: switch.badezimmer_musik
+    - delay:
+        seconds: 2
+    - service: switch.turn_on
+      entity_id: switch.receiver
+    - delay:
+        seconds: 20
+    - service: media_player.select_source
+      data:
+        entity_id: media_player.denon_avrx1200w
+        source: CastAudio
+    - service: media_player.volume_set
+      data:
+        entity_id: media_player.bad_cast
+        volume_level: '0.25'
+    -  service: media_player.volume_set
+       data:
+         entity_id: media_player.wohnzimmercast
+         volume_level: '0.20'
+    -  service: media_player.play_media
+       data_template:
+         entity_id: >
+          {% if is_state("input_select.chromecast_radio", "Badezimmer") %} media_player.bad_cast
+          {% elif is_state("input_select.chromecast_radio", "Wohnzimmer") %} media_player.wohnzimmercast
+          {% elif is_state("input_select.chromecast_radio", "Überall") %} media_player.alles2
+          {% endif %}
+         media_content_id: >
+          {% if is_state("input_select.radio_station", "Radio Steiermark") %} http://mp3stream9.apasf.apa.at:80/;
+          {% elif is_state("input_select.radio_station", "Antenne Steiermark") %} http://live.antenne.at/as;
+          {% elif is_state("input_select.radio_station", "Ö3") %} http://mp3stream9.apasf.apa.at:80/;
+          {% elif is_state("input_select.radio_station", "Soundportal") %} http://rs24.stream24.net:8000;
+          {% endif %}
+         media_content_type: 'audio/mp3'

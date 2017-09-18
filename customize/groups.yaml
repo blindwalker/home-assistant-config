@@ -1,0 +1,22 @@
+#groups
+
+group.ambiente:
+  emulated_hue: true
+
+group.licht:
+  emulated_hue: true
+
+group.deckenlampen:
+  emulated_hue: true
+
+group.vorraumdeckenlampen:
+  friendly_name: "Vorraum Deckenlampen"
+  emulated_hue: true
+
+group.Wohnzimmerlicht:
+  friendly_name: "Wohnzimmerlicht"
+  emulated_hue: true
+
+group.family:
+  friendly_name: 'Family'
+  hidden: False

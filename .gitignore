@@ -1,0 +1,12 @@
+.DS_Store
+secrets.yaml
+.AppleDB/
+.AppleDesktop/
+._.DS_Store
+Network Trash Folder/
+Temporary Items/
+home-assistant_v2.db
+home-assistant.log
+._*
+.git/
+*.crt

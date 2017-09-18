@@ -1,0 +1,8 @@
+#pilight
+
+host: 127.0.0.1
+port: 5002
+send_delay: 0.2
+whitelist:
+protocol:
+  - conrad_rsl_switch

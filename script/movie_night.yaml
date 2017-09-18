@@ -1,0 +1,16 @@
+movie_night:
+  sequence:
+    - service: homeassistant.turn_off
+      entity_id: group.Deckenlampen
+    - service: homeassistant.turn_on
+      entity_id: group.Ambiente
+    - service: homeassistant.turn_on
+      entity_id: switch.receiver
+    - delay:
+        seconds: 4
+    - service: homeassistant.turn_on
+      entity_id: switch.simplitv
+    - service: media_player.select_source
+      entity_id: media_player.denon_avrx1200w
+      data:
+        source: 'SimpliTV'

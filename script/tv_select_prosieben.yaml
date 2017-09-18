@@ -1,0 +1,6 @@
+tv_select_prosieben:
+  sequence:
+    - service: broadlink.send_packet_192_168_188_42
+      data:
+        packet: 
+          - "JgBYAAABJ5EUNRQ1FDUUERQ1FTQUNRURFBEUERQRFTQVERQRFDUUERQ1FBIUNBURFDUUNRQ1FBEVERQ0FREUNRQRFBEVERM1FQAFGgABJ0gTAAxRAAElShIADQU"

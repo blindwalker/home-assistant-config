@@ -1,0 +1,23 @@
+#sensors
+
+sensor.zamg_temperature:
+  friendly_name: 'Temperatur'
+
+sensor.zamg_humidity:
+  friendly_name: 'Luftfeuchtigkeit'
+
+sensor.zamg_wind_speed:
+  friendly_name: 'Windgeschwindigkeit'
+
+binary_sensor.NEQ1112202_STATE:
+  friendly_name: 'Eingangstür'
+
+binary_sensor.NukiBridgeState:
+  friendly_name: 'Nuki Bridge'
+
+sensor.work_travel:
+  friendly_name: 'Fahrzeit Arbeit'
+
+homematic.rf:
+  hidden: True
+  emulated_hue: false

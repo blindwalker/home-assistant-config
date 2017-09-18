@@ -1,0 +1,273 @@
+- alias: 'Esstischlampe ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NAA0003539
+        channel: 1
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_on
+    entity_id: switch.Esstischlampe
+
+- alias: 'Esstischlampe aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NAA0003539
+        channel: 2
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_off
+    entity_id: switch.Esstischlampe
+
+- alias: 'Wohnzimmerlicht ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NAA0003539
+        channel: 1
+        param: PRESS_LONG
+  action:
+    service: homeassistant.turn_on
+    entity_id: group.Wohnzimmerlicht
+
+- alias: 'Wohnzimmerlicht aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NAA0003539
+        channel: 2
+        param: PRESS_LONG
+  action:
+    service: homeassistant.turn_off
+    entity_id: group.Wohnzimmerlicht
+
+- alias: 'Wohnzimmerlampe ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NEQ1001598
+        channel: 1
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_on
+    entity_id: switch.Wohnzimmerlampe
+
+- alias: 'Wohnzimmerlampe aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NEQ1001598
+        channel: 2
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_off
+    entity_id: switch.Wohnzimmerlampe
+
+- alias: 'Couch ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NEQ1001598
+        channel: 3
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_on
+    entity_id: switch.Couch
+
+- alias: 'Couch aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NEQ1001598
+        channel: 4
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_off
+    entity_id: switch.Couch
+
+- alias: 'TV Ambiente ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NEQ1001598
+        channel: 5
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_on
+    entity_id: switch.Kleine_Lampe
+
+- alias: 'TV Ambiente aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NEQ1001598
+        channel: 6
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_off
+    entity_id: switch.Kleine_Lampe
+
+- alias: 'Schlafzimmer Ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NAA0004604
+        channel: 1
+        param: PRESS_SHORT
+  action:
+    service: light.turn_on
+    entity_id: light.bedroom
+
+- alias: 'Schlafzimmer Aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: NAA0004604
+        channel: 2
+        param: PRESS_SHORT
+  action:
+    service: light.turn_off
+    entity_id: light.bedroom
+
+
+- alias: 'Küche Ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484327
+        channel: 1
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_on
+    entity_id: switch.kitchen_light
+
+- alias: 'Küche Aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484327
+        channel: 2
+        param: PRESS_SHORT
+  action:
+    service: switch.turn_off
+    entity_id: switch.kitchen_light
+
+
+- alias: 'Vorraum Ein'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484300
+        channel: 1
+        param: PRESS_SHORT
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484359
+        channel: 1
+        param: PRESS_SHORT
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484358
+        channel: 1
+        param: PRESS_SHORT
+  action:
+    service: homeassistant.turn_on
+    entity_id: group.vorraumdeckenlampen  
+
+- alias: 'Vorraum Aus'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484300
+        channel: 2
+        param: PRESS_SHORT
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484359
+        channel: 2
+        param: PRESS_SHORT
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484358
+        channel: 2
+        param: PRESS_SHORT
+  action:
+    service: homeassistant.turn_off
+    entity_id: group.vorraumdeckenlampen
+
+- alias: 'Leave Home'
+  hide_entity: True
+  trigger:
+    - platform: event
+      event_type: homematic.keypress
+      event_data:
+        name: OEQ0484300
+        channel: 2
+        param: PRESS_LONG
+  action:
+    service: script.turn_on
+    entity_id: script.leave_home
+
+- alias: 'Set Radio Volume'
+  hide_entity: True
+  trigger:
+    platform: state
+    entity_id: input_slider.volume_radio
+  action:
+    service: media_player.volume_set
+    data_template:
+      entity_id: >
+        {% if is_state("input_select.chromecast_radio", "Badezimmer") %} media_player.bad_cast
+        {% elif is_state("input_select.chromecast_radio", "Wohnzimmer") %} media_player.wohnzimmercast
+        {% elif is_state("input_select.chromecast_radio", "Überall") %} media_player.alles
+        {% endif %}
+      volume_level: '{{  states.input_slider.volume_radio.state  }}'
+
+- alias: 'bridge battery'
+  hide_entity: True
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.galaxys4_battery_level
+    below: 80
+  action:
+    service: notify.pushbullet
+    data_template:
+      title: "Nuki Bridge ist offline"
+      message: "Bitte wieder einstecken!"

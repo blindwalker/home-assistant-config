@@ -1,0 +1,10 @@
+#climate
+
+climate.MEQ1581227:
+  friendly_name: 'Vorraum'
+
+climate.MEQ1581255:
+  friendly_name: 'Badezimmer'
+
+climate.MEQ1590184:
+  friendly_name: 'Wohnzimmer'

@@ -1,0 +1,24 @@
+LivingRoomTemp:
+  speech:
+    type: ssml
+    text: <speak>Im Wohnzimmer hat es <say-as interpret-as="unit">{{ states("sensor.livingroom_temp")|float}}</say-as> Grad. <break time="1s"/> Liebste Kerstin</speak>
+
+EntranceTemp:
+  speech:
+    type: ssml
+    text: <speak>Im Vorraum hat es <say-as interpret-as="unit">{{ states("sensor.entrance_temp")|float}}</say-as> Grad. <break time="1s"/> Liebste Kerstin</speak>
+
+
+BathroomTemp:
+  speech:
+    type: ssml
+    text: <speak>Im Badezimmer hat es <say-as interpret-as="unit">{{ states("sensor.bathroom_temp")|float}}</say-as> Grad. <break time="1s"/> Liebste Kerstin</speak>
+
+OverallTemp:
+  speech:
+    type: ssml
+    text: >
+      <speak>Im Wohnzimmer hat es <say-as interpret-as="unit">{{ states("sensor.livingroom_temp")|float}}</say-as> Grad.
+      <speak>Im Vorraum hat es <say-as interpret-as="unit">{{ states("sensor.entrance_temp")|float}}</say-as> Grad.
+      <speak>Im Badezimmer hat es <say-as interpret-as="unit">{{ states("sensor.bathroom_temp")|float}}</say-as> Grad.
+      <break time="1s"/> Liebste Kerstin</speak>

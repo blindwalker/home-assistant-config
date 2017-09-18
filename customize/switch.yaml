@@ -1,0 +1,77 @@
+#switches
+
+switch.Wohnzimmerlampe:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+switch.Esstischlampe:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+switch.Kleine_Lampe:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+  friendly_name: Kleine Lampe
+switch.Couch:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+switch.Kratzbaum:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+light.Bedroom:
+  friendly_name: 'Schlafzimmerlampe'
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+switch.Receiver:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:speaker
+switch.SimpliTV:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:monitor
+switch.Badezimmer_Musik:
+  friendly_name: 'Bad Musik'
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:monitor
+switch.Schlafzimmer_Musik:
+  friendly_name: 'Schlafzimmer Musik'
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:monitor
+switch.Vorraumlampe:
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:monitor
+switch.feed_cat:
+  emulated_hue: true
+  assumed_state: true
+switch.catmotor:
+  emulated_hue: true
+  assumed_state: true
+switch.homeraspi:
+  emulated_hue: false
+  assumed_state: true
+switch.Nintendo:
+  emulated_hue: true
+  assumed_state: true
+switch.kitchen_light:
+  friendly_name: Küchenlampe
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+switch.entrance_mirror_light:
+  friendly_name: Lampe Spiegel
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb
+switch.entrance_door_light:
+  friendly_name: Lampe Eingangstür
+  emulated_hue: true
+  assumed_state: true
+  icon: mdi:lightbulb

@@ -1,0 +1,14 @@
+tv_script:
+  sequence:
+    - service: homeassistant.turn_on
+      entity_id: switch.receiver
+    - delay:
+        seconds: 4
+    - service: homeassistant.turn_on
+      entity_id: switch.simplitv
+    - delay:
+        seconds: 2
+    - service: media_player.select_source
+      entity_id: media_player.denon_avrx1200w
+      data:
+        source: 'SimpliTV'

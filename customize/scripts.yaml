@@ -1,0 +1,19 @@
+#scripts
+script.movie_night:
+  friendly_name: 'Film Abend'
+  emulated_hue: true
+  icon: mdi:monitor
+
+script.tv_select_prosieben:
+  friendly_name: 'Prosieben'
+  emulated_hue: true
+  icon: mdi:monitor
+
+script.tv_script:
+  friendly_name: 'Fernseher'
+  emulated_hue: true
+  icon: mdi:monitor
+
+script.radio538:
+  friendly_name: Start Playing
+  icon: mdi:play

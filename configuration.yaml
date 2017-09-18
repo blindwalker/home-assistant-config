@@ -1,0 +1,341 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret lat
+  longitude: !secret long
+  # Impacts weather/sunrise data (altitude above sea level in meters)
+  elevation: 362
+  # metric for Metric, imperial for Imperial
+  unit_system: metric
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: Europe/Vienna
+
+  customize: !include_dir_merge_named customize
+
+# Show links to resources in log and frontend
+#introduction:
+
+# Enables the frontend
+frontend:
+
+mqtt:
+  broker: 127.0.0.1
+  port: 1883
+  username: !secret mqtt_user
+  password: !secret mqtt_pwd
+
+http:
+  api_password: !secret http_password
+  base_url: !secret base_url
+  ssl_certificate: !secret ssl_certificate
+  ssl_key: !secret ssl_key
+
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+
+# View all events in a logbook
+logbook:
+
+sensor:
+  - platform: yweather
+    woeid: 549081
+    forecast: 1
+    name: wetter_heute
+    monitored_conditions:
+      - weather
+      - weather_current
+      - temp_min
+      - temp_max
+      - wind_speed
+      - humidity
+      - temperature
+  - platform: yweather
+    woeid: 549081
+    forecast: 2
+    name: wetter_morgen
+    monitored_conditions:
+      - weather
+      - weather_current
+      - temp_min
+      - temp_max
+      - wind_speed
+      - humidity
+      - temperature
+  - platform: google_travel_time
+    name: work_travel
+    api_key: !secret maps_api_key
+    origin: !secret travel_home_adress
+    destination: !secret travel_work_adress
+  - platform: template
+    sensors:
+      livingroom_temp:
+        value_template: "{{ states.climate.meq1590184.attributes.current_temperature }}"
+        friendly_name: "Wohnzimmer Temperatur"
+        entity_id: climate.meq1590184
+        unit_of_measurement: '°C'
+      bathroom_temp:
+        value_template: "{{ states.climate.meq1581255.attributes.current_temperature }}"
+        friendly_name: "Badezimmer Temperatur"
+        entity_id: climate.meq15981255
+        unit_of_measurement: '°C'
+      entrance_temp:
+        value_template: "{{ states.climate.meq1581227.attributes.current_temperature }}"
+        friendly_name: "Vorraum Temperatur"
+        entity_id: climate.meq15981227
+        unit_of_measurement:  '°C'
+
+
+# Text to speech
+tts:
+  platform: google
+
+media_player:
+    - platform: cast
+      host: 192.168.188.69
+      name: Nursery
+    - platform: kodi
+      host: 192.168.188.45
+      username: !secret kodi_user
+      password: !secret kodi_pwd
+
+zone:
+  name: Arbeit
+  latitude: !secret work_latitude
+  longitude: !secret work_longitude
+  radius: 250
+  icon: mdi:work
+
+pilight:
+  host: !secret pilight_host
+  port: !secret pilight_port
+  send_delay: 0.2
+  whitelist:
+    protocol:
+      - conrad_rsl_switch
+
+switch: !include devices/switches.yaml
+
+emulated_hue:
+  type: alexa
+  expose_by_default: false
+
+script: !include_dir_merge_named script/
+
+automation: !include_dir_merge_list automation
+
+group:
+  Wohnzimmer:
+    view: yes
+    entities:
+      - group.ambiente
+      - group.deckenlampen
+      - group.Wohnzimmerlicht
+      - group.wohnwand
+      - group.Heizkörper
+      - media_player.denon_avrx1200w
+  Vorraum:
+    view: yes
+    entities:
+      - group.vorraumdeckenlampen
+      - switch.vorraumlampe
+  default_view:
+    view: yes
+    entities:
+      - switch.homeraspi
+      - switch.feed_cat
+      - switch.catmotor
+      - switch.cat_cam_off
+      - group.weather
+      - group.Heizkörper
+      - camera.catcam
+      - camera.galaxys4
+  wetter_heute:
+    name: Heute
+    entities:
+      - sensor.wetter_heute_condition
+      - sensor.wetter_heute_current
+      - sensor.wetter_heute_humidity
+      - sensor.wetter_heute_temperature
+      - sensor.wetter_heute_temperature_max
+      - sensor.wetter_heute_temperature_min
+      - sensor.wetter_heute_wind_speed
+  wetter_morgen:
+    name: Morgen
+    entities:
+      - sensor.wetter_morgen_condition
+      - sensor.wetter_morgen_temperature_max
+      - sensor.wetter_morgen_temperature_min
+  ambiente:
+    name: Ambiente
+    entities:
+      - switch.kleine_lampe
+      - switch.couch
+  deckenlampen:
+    name: Deckenlampen
+    entities:
+      - switch.esstischlampe
+      - switch.wohnzimmerlampe
+      - switch.Kitchen_Light
+  licht:
+    name: Licht
+    entities:
+      - switch.esstischlampe
+      - switch.wohnzimmerlampe
+      - switch.kleine_lampe
+      - switch.couch
+      - switch.Kitchen_Light
+      - switch.entrance_mirror_light
+      - switch.entrance_door_light
+      - switch.entrance_door_light
+      - switch.vorraumlampe
+      - light.Bedroom
+  vorraumdeckenlampen:
+    name: Vorraum Deckenlampen
+    entities:
+      - switch.entrance_mirror_light
+      - switch.entrance_door_light
+      - switch.vorraumlampe
+  wohnwand:
+    name: Wohnwand
+    entities:
+      - switch.receiver
+      - switch.simplitv
+      - script.tv_script
+      - script.movie_night
+      - script.tv_select_prosieben
+  Wohnzimmerlicht:
+    name: Wohnzimmerlicht
+    entities:
+      - switch.esstischlampe
+      - switch.wohnzimmerlampe
+      - switch.kleine_lampe
+      - switch.couch
+      - switch.Kitchen_Light
+  Weather:
+    entities:
+      - sensor.zamg_temperature
+      - sensor.zamg_humidity
+      - sensor.zamg_wind_speed
+  Heizkörper:
+    entities:
+      - climate.MEQ1581227
+      - climate.MEQ1581255
+      - climate.MEQ1590184
+  Schlafzimmer:
+    view: yes
+    entities:
+      - light.Bedroom
+      - switch.nintendo
+      - switch.schlafzimmer_musik
+  Morgen:
+    view: yes
+    entities:
+      - sensor.work_travel
+      - switch.badezimmer_musik
+      - group.radio
+      - media_player.bad_cast
+  Radio:
+    name: Radio
+    entities:
+      - input_select.radio_station
+      - input_select.chromecast_radio
+      - script.radio538
+      - input_slider.volume_radio
+
+input_select:
+  radio_station:
+    name: 'Select Radio Station:'
+    options:
+      - Radio Steiermark
+      - Antenne Steiermark
+      - Ö3
+      - Soundportal
+  chromecast_radio:
+      name: 'Select Speakers:'
+      options:
+        - Badezimmer
+        - Wohnzimmer
+        - Überall
+      initial: Badezimmer
+      icon: mdi:speaker-wireless
+
+input_slider:
+  volume_radio:
+    name: Volume
+    icon: mdi:volume-high
+    min: 0
+    max: 1
+    step: 0.05
+
+logger:
+  default: warn
+  logs:
+    homeassistant.components.homematic: debug
+
+homematic:
+  delay: 1.0
+  hosts:
+    rf:
+      ip: 127.0.0.1
+      resolvenames: json
+      primary: true
+      variables: true
+
+notify:
+  - name: pushbullet
+    platform: pushbullet
+    api_key: !secret pushbullet_api_key
+
+light:
+  platform: limitlessled
+  bridges:
+    - host: !secret limitlessled_host
+      port: !secret limitlessled_port
+      version: 5
+      groups:
+      - number: 1
+        name: Bedroom
+        type: white
+
+lock:
+  - platform: nuki
+    host: !secret nuki_host
+    port: !secret nuki_port
+    token: ivvlgf
+
+android_ip_webcam:
+  host: !secret nuki_host
+  port: !secret s4_cam_port
+  name: galaxyS4
+  username: !secret cam_user
+  password: !secret cam_pwd
+  sensors:
+    - battery_level
+
+camera:
+  - platform: mjpeg
+    mjpeg_url: http://192.168.188.77:8081
+    name: catcam
+    username: !secret cam_user_1
+    password: !secret cam_pwd
+
+binary_sensor 50:
+  - platform: rest
+    name: S4 Motion
+    sensor_class: motion
+    resource: http://192.168.188.25:8081/sensors.json?sense=motion_active
+    value_template: '{{ value_json.motion_active.data[0][1][0] | round(0) }}'
+
+alexa:
+apiai:
+intent_script: !include alexa_intent_script.yaml

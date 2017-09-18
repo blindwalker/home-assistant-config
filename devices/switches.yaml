@@ -1,0 +1,210 @@
+### SWITCHES ###
+
+- platform: pilight
+  switches:
+    SimpliTV:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '1'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '1'
+        'off': '1'
+
+    Receiver:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '2'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '2'
+        'off': '1'
+
+    Kleine_Lampe:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '4'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '4'
+        'off': '1'
+
+    Couch:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '8'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '10'
+        unitcode: '8'
+        'off': '1'
+
+    Nintendo:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '29'
+        unitcode: '2'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '29'
+        unitcode: '2'
+        'off': '1'
+
+    Vorraumlampe:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '26'
+        unitcode: '4'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '26'
+        unitcode: '4'
+        'off': '1'
+
+    Badezimmer_Musik:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '26'
+        unitcode: '1'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '26'
+        unitcode: '1'
+        'off': '1'
+
+    Schlafzimmer_Musik:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '26'
+        unitcode: '2'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '26'
+        unitcode: '2'
+        'off': '1'
+
+    Esstischlampe:
+      on_code:
+        protocol: kaku_switch_old
+        id: '4'
+        unit: '0'
+        'on': 1
+      off_code:
+        protocol: kaku_switch_old
+        id: '4'
+        unit: '0'
+        'off': 1
+      on_code_receive:
+        protocol: conrad_rsl_switch
+        id: 2
+        unit: 4 
+        state: 'on'
+      off_code_receive:         
+        protocol: conrad_rsl_switch
+        id: 2
+        unit: 4
+        state: 'off'
+
+    Wohnzimmerlampe:
+      on_code:
+        protocol: kaku_switch_old
+        id: '5'
+        unit: '0'
+        'on': '1'
+      off_code:
+        protocol: kaku_switch_old
+        id: '5'
+        unit: '0'
+        'off': '1'
+      on_code_receive:
+        protocol: conrad_rsl_switch
+        unit: 2
+        id: 2
+        state: 'on'
+      off_code_receive: 
+        protocol: conrad_rsl_switch
+        unit: 2
+        id: 2
+        state: 'off'
+
+    CatMotor:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '28'
+        unitcode: '4'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '28'
+        unitcode: '4'
+        'off': '1'
+
+    HomeRaspi:
+      on_code:
+        protocol: elro_800_switch
+        systemcode: '28'
+        unitcode: '8'
+        'on': '1'
+      off_code:
+        protocol: elro_800_switch
+        systemcode: '28'
+        unitcode: '8'
+        'off': '1'
+
+- platform: command_line
+  switches:
+    feed_cat:
+      command_on: "/home/homeassistant/move_servo.sh"
+      friendly_name: Katze füttern
+    cat_cam_off:
+      command_on: "/home/homeassistant/start_motion.sh"
+      command_off: "/home/homeassistant/stop_motion.sh"
+      friendly_name: Kamera einschalten
+
+- platform: mqtt
+  name: "kitchen_light"
+  state_topic: "tele/home/sonoff/kitchen/ceiling/RESULT"
+  command_topic: "cmnd/home/sonoff/kitchen/ceiling/POWER"
+  qos: 1
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+
+- platform: mqtt
+  name: "entrance_mirror_light"
+  state_topic: "tele/home/sonoff/entrance/mirror/RESULT"
+  command_topic: "cmnd/home/sonoff/entrance/mirror/POWER"
+  qos: 1
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+
+- platform: mqtt
+  name: "entrance_door_light"
+  state_topic: "tele/home/sonoff/entrance/door/RESULT"
+  command_topic: "cmnd/home/sonoff/entrance/door/POWER"
+  qos: 1
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+
+- platform: broadlink
+  host: 192.168.188.42
+  mac: b4:43:0D:F9:29:66
+  friendly_name: Bedroom IR
+  type: rm_mini
