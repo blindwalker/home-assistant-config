@@ -1,0 +1,11 @@
+- alias: 'Lüften notwending'
+  trigger:
+    platform: numeric_state
+    entity_id: sensor.esp_livingroom_humidity
+    value_template: '{{ states.sensor.esp_livingroom_humidity.state }}'
+    above: 60.00
+  action:
+    service: notify.pushbullet
+    data_template:
+      title: "Wohnzimmer lüften!"
+      message: "Die Luftfeuchtigkeit beträgt {{ states.sensor.esp_livingroom_humidity.state }}%, bitte lüften!"
