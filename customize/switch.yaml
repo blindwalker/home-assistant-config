@@ -26,14 +26,20 @@ light.Bedroom:
   emulated_hue: true
   assumed_state: true
   icon: mdi:lightbulb
+light.gateway_light_34ce008bf462:
+  friendly_name: 'Gateway Licht'
+  emulated_hue: false
+  assumed_state: true
+  icon: mdi:lightbulb
 switch.Receiver:
   emulated_hue: true
   assumed_state: true
   icon: mdi:speaker
-switch.SimpliTV:
+switch.Camera_Livingroom:
+  friendly_name: Wohnzimmer
   emulated_hue: true
   assumed_state: true
-  icon: mdi:monitor
+  icon: mdi:camera
 switch.Badezimmer_Musik:
   friendly_name: 'Bad Musik'
   emulated_hue: true
@@ -47,7 +53,7 @@ switch.Schlafzimmer_Musik:
 switch.Vorraumlampe:
   emulated_hue: true
   assumed_state: true
-  icon: mdi:monitor
+  icon: mdi:lightbulb
 switch.feed_cat:
   emulated_hue: true
   assumed_state: true
@@ -57,9 +63,11 @@ switch.catmotor:
 switch.homeraspi:
   emulated_hue: false
   assumed_state: true
-switch.Nintendo:
+switch.Schlafzimmer_Ambiente:
+  friendly_name: Nachtkasterl
   emulated_hue: true
   assumed_state: true
+  icon: mdi:lightbulb
 switch.kitchen_light:
   friendly_name: Küchenlampe
   emulated_hue: true

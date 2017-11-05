@@ -12,3 +12,8 @@ tv_script:
       entity_id: media_player.denon_avrx1200w
       data:
         source: 'SimpliTV'
+    - delay:
+        seconds: 20
+    - service: script.turn_on
+      data_template:
+        entity_id: script.orfeins

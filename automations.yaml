@@ -129,31 +129,65 @@
     service: switch.turn_off
     entity_id: switch.Kleine_Lampe
 - id: schlafzimmer_ein
-  alias: Schlafzimmer Ein
+  alias: Schlafzimmer Alles Ein
   hide_entity: true
   trigger:
-  - platform: event
-    event_type: homematic.keypress
-    event_data:
-      name: NAA0004604
+  - event_data:
       channel: 1
+      name: NAA0004604
       param: PRESS_SHORT
+    event_type: homematic.keypress
+    platform: event
   action:
-    service: light.turn_on
+  - data:
+      entity_id: light.bedroom
     entity_id: light.bedroom
-- id: schlafzimmer_aus
-  alias: Schlafzimmer Aus
+    service: light.turn_on
+  - data:
+      entity_id: switch.schlafzimmer_ambiente
+    service: switch.turn_on
+- id: schlafzimmer_ambiente_ein
+  alias: Schlafzimmer Ambiente Ein / Decke aus
   hide_entity: true
   trigger:
-  - platform: event
-    event_type: homematic.keypress
-    event_data:
+  - event_data:
+      channel: 1
       name: NAA0004604
-      channel: 2
-      param: PRESS_SHORT
+      param: PRESS_LONG
+    event_type: homematic.keypress
+    platform: event
   action:
+  - data:
+      entity_id: switch.schlafzimmer_ambiente
+    entity_id: switch.schlafzimmer_ambiente
+    service: switch.turn_on
+  - data:
+      entity_id: light.bedroom
     service: light.turn_off
+- id: schlafzimmer_aus
+  alias: Schlafzimmer Aus Kurz
+  hide_entity: true
+  trigger:
+  - event_data:
+      channel: 2
+      name: NAA0004604
+      param: PRESS_LONG
+    event_type: homematic.keypress
+    platform: event
+  - event_data:
+      channel: 2
+      name: NAA0004604
+      param: PRESS_SHORT
+    event_type: homematic.keypress
+    platform: event
+  action:
+  - data:
+      entity_id: light.bedroom
     entity_id: light.bedroom
+    service: light.turn_off
+  - data:
+      entity_id: switch.schlafzimmer_ambiente
+    service: switch.turn_off
 - id: "k\xFCche_ein"
   alias: "K\xFCche Ein"
   hide_entity: true
@@ -168,7 +202,7 @@
     service: switch.turn_on
     entity_id: switch.kitchen_light
 - id: "k\xFCche_aus"
-  alias: "K\xFCche Aus"
+  alias: K\xFCche Aus
   hide_entity: true
   trigger:
   - platform: event
@@ -202,6 +236,24 @@
       name: OEQ0484358
       channel: 1
       param: PRESS_SHORT
+  - platform: event
+    event_type: homematic.keypress
+    event_data:
+      name: OEQ0484300
+      channel: 1
+      param: PRESS_LONG
+  - platform: event
+    event_type: homematic.keypress
+    event_data:
+      name: OEQ0484359
+      channel: 1
+      param: PRESS_LONG
+  - platform: event
+    event_type: homematic.keypress
+    event_data:
+      name: OEQ0484358
+      channel: 1
+      param: PRESS_LONG
   action:
     service: homeassistant.turn_on
     entity_id: group.vorraumdeckenlampen
@@ -227,6 +279,18 @@
       name: OEQ0484358
       channel: 2
       param: PRESS_SHORT
+  - platform: event
+    event_type: homematic.keypress
+    event_data:
+      name: OEQ0484359
+      channel: 2
+      param: PRESS_LONG
+  - platform: event
+    event_type: homematic.keypress
+    event_data:
+      name: OEQ0484358
+      channel: 2
+      param: PRESS_LONG
   action:
     service: homeassistant.turn_off
     entity_id: group.vorraumdeckenlampen
@@ -258,20 +322,20 @@
         , \"\xDCberall\") %} media_player.alles {% endif %}\n"
       volume_level: '{{  states.input_slider.volume_radio.state  }}'
 - action:
-  - data:
-      message: "Wohnzimmer l\xFCften!"
-      title: Im Wohnzimmer hat es {{  states.sensor.livingroom_humidity.state  }}%
-        Luftfeuchtigkeit
+  - alias: luften_notify
+    data:
+      message: Im Wohnzimmer hat es {{  states.sensor.livingroom_humidity.state  }}%Luftfeuchtigkeit
+      title: "Wohnzimmer l\xFCften!"
     service: notify.notify_group
-  alias: Luften
+  alias: Luften Message
   condition:
   - after: 08:00
-    before: '22:30'
+    before: '23:00'
     condition: time
   - condition: state
     entity_id: binary_sensor.should_vent
     state: 'on'
-  id: '1505935066796'
+  id: '1507060300449'
   trigger:
   - entity_id: binary_sensor.livingroom_humidity_too_high
     from: 'off'
@@ -279,14 +343,307 @@
     to: 'on'
 - action:
   - data:
-      message: Luftfeuchtigkeit ist wieder unter 60%
-      title: "Genug gel\xFCftet"
-    service: notify.notify_all
-  alias: LuftenBeenden
+      entity_id: switch.camera_livingroom
+    service: homeassistant.turn_on
+  alias: Activate Alarm
   condition: []
-  id: '1505936730583'
+  id: '1507060931883'
   trigger:
-  - entity_id: sensor.livingroom_humidity_too_high
+  - entity_id: binary_sensor.alarm_active
+    from: 'off'
+    platform: state
+    to: 'on'
+- action:
+  - alias: notify_alarm_movement
+    data:
+      message: "UM GOUTTES W\xDCN"
+      title: Do is wos im Wohnzimmer
+    service: notify.notify_group
+  - alias: alarm_movement_light
+    data:
+      entity_id: group.licht
+    service: switch.turn_on
+  alias: Alarm movement living room
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.home_alarm
+    state: armed_away
+  id: '1507061537021'
+  trigger:
+  - entity_id: binary_sensor.motion_sensor_158d0001db07c2
+    from: 'off'
+    platform: state
+    to: 'on'
+- action:
+  - data:
+      entity_id: switch.camera_livingroom
+    service: homeassistant.turn_off
+  alias: Deactivate Alarm
+  condition: []
+  id: '1508872694816'
+  trigger:
+  - entity_id: binary_sensor.alarm_active
+    from: 'on'
+    platform: state
+    to: 'off'
+- alias: martimon_switch
+  trigger:
+    platform: event
+    event_type: click
+    event_data:
+      entity_id: binary_sensor.wall_switch_158d0001830d3f
+      click_type: single
+  action:
+    service: switch.toggle
+    entity_id: switch.schlafzimmer_ambiente
+- alias: kerstimon_switch_single
+  trigger:
+    platform: event
+    event_type: click
+    event_data:
+      entity_id: binary_sensor.switch_158d0001a3f6a6
+      click_type: single
+  action:
+    service: switch.toggle
+    entity_id: switch.schlafzimmer_ambiente
+- alias: kerstimon_switch_double
+  trigger:
+    platform: event
+    event_type: click
+    event_data:
+      entity_id: binary_sensor.switch_158d0001a3f6a6
+      click_type: double
+  action:
+    service: light.toggle
+    entity_id: light.bedroom
+- alias: kerstimon_switch_hold
+  trigger:
+    platform: event
+    event_type: click
+    event_data:
+      entity_id: binary_sensor.switch_158d0001a3f6a6
+      click_type: hold
+  action:
+  - data:
+      entity_id: light.bedroom
+    entity_id: light.bedroom
+    service: light.turn_off
+  - data:
+      entity_id: switch.schlafzimmer_ambiente
+    service: switch.turn_off
+- action:
+  - alias: light_on
+    data:
+      brightness: '255'
+      entity_id: light.gateway_light_34ce008bf462
+      rgb_color:
+      - 255
+      - 0
+      - 0
+    service: light.turn_on
+  alias: Humidity Light 1
+  condition: []
+  id: '1509558765755'
+  trigger:
+  - above: '65'
+    entity_id: sensor.esp_livingroom_humidity
+    platform: numeric_state
+- action:
+  - alias: light_humidity_2
+    data:
+      brightness: '125'
+      entity_id: light.gateway_light_34ce008bf462
+      rgb_color:
+      - 255
+      - 137
+      - 0
+    service: light.turn_on
+  alias: Humidity Light 2
+  condition: []
+  id: '1509559358049'
+  trigger:
+  - above: '62'
+    below: '65'
+    entity_id: sensor.esp_livingroom_humidity
+    platform: numeric_state
+- action:
+  - alias: light_humidity_3
+    data:
+      brightness: '125'
+      entity_id: light.gateway_light_34ce008bf462
+      rgb_color:
+      - 255
+      - 222
+      - 0
+    service: light.turn_on
+  alias: Humidity Light 3
+  condition: []
+  id: '1509559430706'
+  trigger:
+  - above: '58'
+    below: '62'
+    entity_id: light.gateway_light_34ce008bf462
+    platform: numeric_state
+- action:
+  - alias: light_humidity_off
+    data:
+      entity_id: light.gateway_light_34ce008bf462
+    service: light.turn_off
+  alias: Humidity Light Off
+  condition: []
+  id: '1509559545297'
+  trigger:
+  - below: '57'
+    entity_id: sensor.esp_livingroom_humidity
+    platform: numeric_state
+- action:
+  - alias: notify_alarm_balcony_door
+    data:
+      message: "UM GOUTTES W\xDCN"
+      title: "Die Balkont\xFCr is offn!"
+    service: notify.notify_group
+  - alias: notify_alarm_balcony_door
+    data:
+      entity_id: group.licht
+    service: switch.turn_on
+  alias: Alarm Balcony Door
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.home_alarm
+    state: armed_away
+  id: '1509563792778'
+  trigger:
+  - entity_id: binary_sensor.door_window_sensor_158d0001840464
+    from: 'off'
+    platform: state
+    to: 'on'
+- action:
+  - alias: notify_alarm_office_window
+    data:
+      message: "UM GOUTTES W\xDCN"
+      title: "As B\xFCrofenster is offn!"
+    service: notify.notify_group
+  - alias: notify_alarm_balcony_door
+    data:
+      entity_id: group.licht
+    service: switch.turn_on
+  alias: Alarm Office Window
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.home_alarm
+    state: armed_away
+  id: '1509563792779'
+  trigger:
+  - entity_id: binary_sensor.door_window_sensor_158d00015b8bd1
+    from: 'off'
+    platform: state
+    to: 'on'
+- action:
+  - alias: notify_alarm_bedroom_window
+    data:
+      message: "UM GOUTTES W\xDCN"
+      title: As Schlofzimmerfenster is offn!
+    service: notify.notify_group
+  - alias: notify_alarm_balcony_door
+    data:
+      entity_id: group.licht
+    service: switch.turn_on
+  alias: Alarm Bedroom Window
+  condition:
+  - condition: state
+    entity_id: alarm_control_panel.home_alarm
+    state: armed_away
+  id: '1509563792780'
+  trigger:
+  - entity_id: binary_sensor.door_window_sensor_158d00018384ac
+    from: 'off'
+    platform: state
+    to: 'on'
+- action:
+  - alias: notify_alarm_windows_still_open
+    data:
+      message: Obacht
+      title: "Do is no wos offn! Zuamochn owa schn\xF6!"
+    service: notify.notify_group
+  alias: Alarm activation check
+  condition:
+    condition: or
+    conditions:
+    - condition: state
+      entity_id: binary_sensor.door_window_sensor_158d00018384ac
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.door_window_sensor_158d00015b8bd1
+      state: 'on'
+    - condition: state
+      entity_id: binary_sensor.door_window_sensor_158d0001840464
+      state: 'on'
+  id: '1509724038985'
+  trigger:
+  - entity_id: binary_sensor.alarm_active
+    from: 'off'
+    platform: state
+    to: 'on'
+- action:
+  - alias: balcony_door_turn_off_thermostat_1
+    data:
+      entity_id: climate.meq1590184
+      operation_mode: lowering
+    service: climate.set_operation_mode
+  - alias: balcony_door_turn_off_thermostat_2
+    data:
+      entity_id: climate.meq1581227
+      operation_mode: lowering
+    service: climate.set_operation_mode
+  alias: Opened Door Thermostat OFF
+  condition: []
+  id: '1509827000571'
+  trigger:
+  - entity_id: binary_sensor.door_window_sensor_158d0001840464
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.door_window_sensor_158d00015b8bd1
+    from: 'off'
+    platform: state
+    to: 'on'
+  - entity_id: binary_sensor.door_window_sensor_158d00018384ac
+    from: 'off'
+    platform: state
+    to: 'on'
+- action:
+  - alias: balcony_door_turn_on_thermostat_1
+    data:
+      entity_id: climate.meq1590184
+      operation_mode: auto
+    service: climate.set_operation_mode
+  - alias: balcony_door_turn_on_thermostat_2
+    data:
+      entity_id: climate.meq1581227
+      operation_mode: auto
+    service: climate.set_operation_mode
+  alias: Opened Door Thermostat ON
+  condition:
+  - condition: state
+    entity_id: binary_sensor.door_window_sensor_158d0001840464
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.door_window_sensor_158d00015b8bd1
+    state: 'off'
+  - condition: state
+    entity_id: binary_sensor.door_window_sensor_158d00018384ac
+    state: 'off'
+  id: '1509827000572'
+  trigger:
+  - entity_id: binary_sensor.door_window_sensor_158d0001840464
+    from: 'on'
+    platform: state
+    to: 'off'
+  - entity_id: binary_sensor.door_window_sensor_158d00015b8bd1
+    from: 'on'
+    platform: state
+    to: 'off'
+  - entity_id: binary_sensor.door_window_sensor_158d00018384ac
     from: 'on'
     platform: state
     to: 'off'

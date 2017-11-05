@@ -16,12 +16,15 @@ homeassistant:
 # Show links to resources in log and frontend
 #introduction:
 
+config:
+
+
 # Enables the frontend
 frontend:
 
 mqtt:
   broker: 127.0.0.1
-  port: 1883
+  port: !secret mqtt_port
   username: !secret mqtt_user
   password: !secret mqtt_pwd
 
@@ -76,23 +79,61 @@ sensor:
     api_key: !secret maps_api_key
     origin: !secret travel_home_adress
     destination: !secret travel_work_adress
+  - platform: mqtt
+    state_topic: 'home/livingroom/temp'
+    name: esp_livingroom_temp
+  - platform: mqtt
+    state_topic: 'home/livingroom/humidity'
+    name: esp_livingroom_humidity
   - platform: template
     sensors:
       livingroom_temp:
-        value_template: "{{ states.climate.meq1590184.attributes.current_temperature }}"
-        friendly_name: "Wohnzimmer Temperatur"
+        value_template: "{{ states.sensor.esp_livingroom_temp.state | multiply(1) | round }}"
+        friendly_name: "Wohnzimmer"
         entity_id: climate.meq1590184
         unit_of_measurement: '°C'
+      livingroom_humidity:
+        value_template: "{{ states.sensor.esp_livingroom_humidity.state | multiply(1) | round }}"
+        friendly_name: "Wohnzimmer"
+        entity_id: climate.meq1590184
+        unit_of_measurement: '%'
       bathroom_temp:
-        value_template: "{{ states.climate.meq1581255.attributes.current_temperature }}"
+        value_template: "{{ states.climate.meq1581255.attributes.current_temperature | replace(\".\",\",\") }}"
         friendly_name: "Badezimmer Temperatur"
         entity_id: climate.meq15981255
         unit_of_measurement: '°C'
       entrance_temp:
-        value_template: "{{ states.climate.meq1581227.attributes.current_temperature }}"
+        value_template: "{{ states.climate.meq1581227.attributes.current_temperature | replace(\".\",\",\") }}"
         friendly_name: "Vorraum Temperatur"
         entity_id: climate.meq15981227
         unit_of_measurement:  '°C'
+      humidity_outside_valid:
+        value_template: "{{  (float(states.sensor.wetter_heute_humidity.state) - 3*(float(states.sensor.esp_livingroom_temp.state) - float(states.sensor.wetter_heute_temperature.state)) + 5) | multiply(1) | round  }}"
+        unit_of_measurement:  'C'
+
+
+binary_sensor:
+  - platform: mqtt
+    state_topic: 'home/livingroom/movement'
+    name: 'livingroom_pir'
+    device_class: motion
+  - platform: template
+    sensors:
+      livingroom_humidity_too_high:
+        value_template: "{{ states('sensor.livingroom_humidity') | int > 60 }}"
+        entity_id: sensor.livingroom_humidity
+      should_vent:
+        friendly_name: "Luften sinnvoll"
+        value_template: "{{  states('sensor.livingroom_humidity') > states('sensor.humidity_outside_valid')  }}"
+      alarm_active:
+        value_template: "{{  states('alarm_control_panel.home_alarm') == 'armed_away'  }}"
+        friendly_name: "Alarmelen"      
+
+#  - platform: mqtt
+#    sensors:
+#      esp_livingroom_temp:
+#        state_topic: '/home/livingroom/temp'
+#        unit_of_measurement: "°C"
 
 
 # Text to speech
@@ -101,10 +142,10 @@ tts:
 
 media_player:
     - platform: cast
-      host: 192.168.188.69
+      host: !secret cast_ip
       name: Nursery
     - platform: kodi
-      host: 192.168.188.45
+      host: !secret kodi_ip
       username: !secret kodi_user
       password: !secret kodi_pwd
 
@@ -123,6 +164,12 @@ pilight:
     protocol:
       - conrad_rsl_switch
 
+xiaomi_aqara:
+  gateways:
+  - host: !secret xiaomi_ip
+    mac: !secret xiaomi_max
+    key: !secret xiaomi_key
+
 switch: !include devices/switches.yaml
 
 emulated_hue:
@@ -131,7 +178,7 @@ emulated_hue:
 
 script: !include_dir_merge_named script/
 
-automation: !include_dir_merge_list automation
+automation: !include automations.yaml
 
 group:
   Wohnzimmer:
@@ -151,14 +198,23 @@ group:
   default_view:
     view: yes
     entities:
-      - switch.homeraspi
-      - switch.feed_cat
-      - switch.catmotor
-      - switch.cat_cam_off
-      - group.weather
-      - group.Heizkörper
-      - camera.catcam
-      - camera.galaxys4
+      - group.alarm
+      - group.temperatures
+      - group.humidities
+      - group.cameras
+      - group.door_sensors
+#      - switch.homeraspi
+#      - switch.feed_cat
+#      - switch.catmotor
+#      - switch.cat_cam_off
+#      - group.weather
+#      - group.Heizkörper
+#      - camera.catcam
+#      - camera.galaxys4
+  cameras:
+    name: Kameras
+    entities:
+      - switch.camera_livingroom
   wetter_heute:
     name: Heute
     entities:
@@ -169,6 +225,30 @@ group:
       - sensor.wetter_heute_temperature_max
       - sensor.wetter_heute_temperature_min
       - sensor.wetter_heute_wind_speed
+  temperatures:
+    name: Temperaturen
+    entities:
+      - sensor.livingroom_temp
+      - sensor.entrance_temp
+      - sensor.bathroom_temp
+  door_sensors:
+    name: Türkontakte
+    entities:
+      - binary_sensor.door_window_sensor_158d0001840464
+      - binary_sensor.door_window_sensor_158d00018384ac
+      - binary_sensor.door_window_sensor_158d00015b8bd1
+  alarm:
+    name: Alarm
+    entities:
+      - alarm_control_panel.home_alarm
+  humidities:
+    name: Luftfeuchtigkeit
+    entities:
+      - sensor.livingroom_humidity
+      - binary_sensor.should_vent
+      - sensor.wetter_heute_temperature
+      - sensor.wetter_heute_humidity
+      - light.gateway_light_34ce008bf462
   wetter_morgen:
     name: Morgen
     entities:
@@ -196,9 +276,9 @@ group:
       - switch.Kitchen_Light
       - switch.entrance_mirror_light
       - switch.entrance_door_light
-      - switch.entrance_door_light
       - switch.vorraumlampe
       - light.Bedroom
+      - switch.Schlafzimmer_Ambiente
   vorraumdeckenlampen:
     name: Vorraum Deckenlampen
     entities:
@@ -209,7 +289,6 @@ group:
     name: Wohnwand
     entities:
       - switch.receiver
-      - switch.simplitv
       - script.tv_script
       - script.movie_night
       - script.tv_select_prosieben
@@ -234,9 +313,12 @@ group:
   Schlafzimmer:
     view: yes
     entities:
+      - group.Schlafzimmer_Licht
+  Schlafzimmer_Licht:
+    name: Licht
+    entities:
       - light.Bedroom
-      - switch.nintendo
-      - switch.schlafzimmer_musik
+      - switch.Schlafzimmer_Ambiente
   Morgen:
     view: yes
     entities:
@@ -283,7 +365,6 @@ logger:
     homeassistant.components.homematic: debug
 
 homematic:
-  delay: 1.0
   hosts:
     rf:
       ip: 127.0.0.1
@@ -291,10 +372,16 @@ homematic:
       primary: true
       variables: true
 
+telegram_bot:
+  - platform: polling
+    api_key: !secret telegram_api_key
+    allowed_chat_ids:
+      - !secret telegram_group_id
+
 notify:
-  - name: pushbullet
-    platform: pushbullet
-    api_key: !secret pushbullet_api_key
+  - name: notify_group
+    platform: telegram
+    chat_id: !secret telegram_group_id
 
 light:
   platform: limitlessled
@@ -307,34 +394,39 @@ light:
         name: Bedroom
         type: white
 
-lock:
-  - platform: nuki
-    host: !secret nuki_host
-    port: !secret nuki_port
-    token: ivvlgf
+alarm_control_panel:
+  - platform: manual
+    name: Home Alarm
+    pending_time: 10
 
-android_ip_webcam:
-  host: !secret nuki_host
-  port: !secret s4_cam_port
-  name: galaxyS4
-  username: !secret cam_user
-  password: !secret cam_pwd
-  sensors:
-    - battery_level
-
-camera:
-  - platform: mjpeg
-    mjpeg_url: http://192.168.188.77:8081
-    name: catcam
-    username: !secret cam_user_1
-    password: !secret cam_pwd
-
-binary_sensor 50:
-  - platform: rest
-    name: S4 Motion
-    sensor_class: motion
-    resource: http://192.168.188.25:8081/sensors.json?sense=motion_active
-    value_template: '{{ value_json.motion_active.data[0][1][0] | round(0) }}'
+#lock:
+#  - platform: nuki
+#    host: !secret nuki_host
+#    port: !secret nuki_port
+#    token: 
+#
+#android_ip_webcam:
+#  host: !secret nuki_host
+#  port: !secret s4_cam_port
+#  name: galaxyS4
+#  username: !secret cam_user
+#  password: !secret cam_pwd
+#  sensors:
+#    - battery_level
+#
+#camera:
+#  - platform: mjpeg
+#    mjpeg_url: http://
+#    name: catcam
+#    username: !secret cam_user_1
+#    password: !secret cam_pwd
+#
+#binary_sensor 50:
+#  - platform: rest
+#    name: S4 Motion
+#    sensor_class: motion
+#    resource: http://192.168.188.25:8081/sensors.json?sense=motion_active
+#    value_template: '{{ value_json.motion_active.data[0][1][0] | round(0) }}'
 
 alexa:
 apiai:

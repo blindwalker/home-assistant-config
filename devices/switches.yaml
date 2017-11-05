@@ -2,7 +2,7 @@
 
 - platform: pilight
   switches:
-    SimpliTV:
+    Camera_Livingroom:
       on_code:
         protocol: elro_800_switch
         systemcode: '10'
@@ -50,7 +50,7 @@
         unitcode: '8'
         'off': '1'
 
-    Nintendo:
+    Schlafzimmer_Ambiente:
       on_code:
         protocol: elro_800_switch
         systemcode: '29'
@@ -112,9 +112,9 @@
       on_code_receive:
         protocol: conrad_rsl_switch
         id: 2
-        unit: 4 
+        unit: 4
         state: 'on'
-      off_code_receive:         
+      off_code_receive:
         protocol: conrad_rsl_switch
         id: 2
         unit: 4
@@ -136,7 +136,7 @@
         unit: 2
         id: 2
         state: 'on'
-      off_code_receive: 
+      off_code_receive:
         protocol: conrad_rsl_switch
         unit: 2
         id: 2

@@ -1,10 +1,10 @@
 #sensors
 
-sensor.zamg_temperature:
+sensor.wetter_heute_temperature:
   friendly_name: 'Temperatur'
 
-sensor.zamg_humidity:
-  friendly_name: 'Luftfeuchtigkeit'
+sensor.wetter_heute_humidity:
+  friendly_name: 'Luftfeuchtigkeit Aussen'
 
 sensor.zamg_wind_speed:
   friendly_name: 'Windgeschwindigkeit'
@@ -21,3 +21,15 @@ sensor.work_travel:
 homematic.rf:
   hidden: True
   emulated_hue: false
+
+binary_sensor.door_window_sensor_158d0001840464:
+  friendly_name: Balkontür
+  icon: mdi:glassdoor
+
+binary_sensor.door_window_sensor_158d00018384ac:
+  friendly_name: Schlafzimmer Fenster
+  icon: mdi:glassdoor
+
+binary_sensor.door_window_sensor_158d00015b8bd1:
+  friendly_name: Büro Fenster
+  icon: mdi:glassdoor

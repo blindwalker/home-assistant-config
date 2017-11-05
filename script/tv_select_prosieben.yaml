@@ -1,6 +1,74 @@
-tv_select_prosieben:
-  sequence:
-    - service: broadlink.send_packet_192_168_188_42
-      data:
-        packet: 
-          - "JgBYAAABJ5EUNRQ1FDUUERQ1FTQUNRURFBEUERQRFTQVERQRFDUUERQ1FBIUNBURFDUUNRQ1FBEVERQ0FREUNRQRFBEVERM1FQAFGgABJ0gTAAxRAAElShIADQU"
+  orfeins:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABKZMTNhM3EjcSExI3EjgTNhMTFBEWDxMSEzYTFBETEjcWDxMzFhMSNxI3EhMSNxI3ExITExI4EhMTEhM2ExMSExI3EgAFGgABJUoTAA0FAAAAAAAAAAA=="
+
+  orfzwei:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABJZMUNRM3EjcTEhI3EzYSNxMSFBISExMSEjcTEhMSEzcSExITExITNhQ1ExITNxM2EhMTNhM2ExIUEhM1FBITEhM2FAAFGwABJUoTAA0FAAAAAAAAAAA=="
+
+  ard:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABJZMTNhM2EjcTExI3EjcSNxITExIUEhITEzYSExITFDUTExQ1EjcSExITEzUVNRMTEhMSExMSEzYSOBMSEhMSNxI3EwAFHAABJkkTAA0FAAAAAAAAAAA=="
+
+  zdf:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABKJESNxI3EzYTEhM2EjkSNxITExISFBITEjcSFBETEzYUEhI3EhMSERYREzYUNhM2ExITEhM2EzYTNhQSEhMTEhM2EwAFGgABJ0kSAA0FAAAAAAAAAAA=="
+
+  rtl:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABJpIUNRYzEzcTDxY2EjgTNhQSEhMRFBITEzYTFBETEjcSExcOFBISExITEzYSNxM2FBETNRQ3EjcSNxMSExMSExM2EgAFGwABJUoTAA0FAAAAAAAAAAA=="
+
+  sateins:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABJZMTNhM2EzcSExI3EjgTNxITEhMSExMSEzYTFBETEjcTEhM2EzYTNxITEjcSNxITExITERQTEhMTNhMSExMSNxI3EgAFGwABJkkTAA0FAAAAAAAAAAA=="
+
+  prosieben:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABKJAUNRQ1FTQTExI3EjgTNhMTEhMRFBITEzYTFBITEzYTEhM2ExMSNxITEjcTNhM2ExMSExI3EhMSNxMSExMSExI3EgAFGgABJUoSAA0FAAAAAAAAAAA=="
+
+  rtlzwei:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABJZMTNhM2EzYTExQ1EzcUNRUQFRETEhQRFDUVEhISFDUUERQRFRAVNBURFDUSNxI3FBAWNBM4EhMUNRISFhAVERQ1EgAFGgABJkkSAA0FAAAAAAAAAAA=="
+
+  vox:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+            - "JgBQAAABJpISNxM2EzYTExI3EjcSNxITEhMTEhoMEjcSExITEzYTEhM2EzcSExI3EjcSNxQTEhMSExITEzYTExQRFBEUNRQ1FAAFGQABJkkTAA0FAAAAAAAAAAA=="
+
+  dmax:
+    sequence:
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+           - "JgBQAAABKZMTNhM3EjcSExI3EjgTNhMTFBEWDxMSEzYTFBETEjcWDxMzFhMSNxI3EhMSNxI3ExITExI4EhMTEhM2ExMSExI3EgAFGgABJUoTAA0FAAAAAAAAAAA=="
+      - delay: '00:00:01'
+      - service: broadlink.send_packet_192_168_188_42
+        data:
+          packet:
+          - "JgBQAAABKJETNhM2EzYTEhM2EzgRNhMTEhMSExMSEzYTExITEjcSExMSExMTEhI3EjcTNhM2ExMSNxU0EjcTEhITFBETExcxFQAFGgABJkkTAA0FAAAAAAAAAAA=="
